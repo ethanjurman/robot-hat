@@ -2,13 +2,18 @@ import sys
 import nltk
 from nltk.corpus import wordnet as wn
 from nltk.corpus import stopwords
-from nltk.tag import pos_tag
-from nltk.parse.bllip import BllipParser
 import builtins
 import types
 import inspect
 
+sys.path.append('pywsd')
+sys.path.append('pywsd/pywsd')
+from lesk import simple_lesk
+from pywsd import disambiguate
+from pywsd.similarity import max_similarity as maxsim
+
 import sentence_cleaner as sc
+import word_checker as wc
 
 if (len(sys.argv) < 2):
     # no sentence provided
@@ -16,9 +21,7 @@ if (len(sys.argv) < 2):
     sys.exit(0)
 
 sentence = sys.argv[1]
-sentence = sc.clean(sentence)
-# words = [w for w in pos_tag(sentence.split())]
-words = sentence.split(" ")
-print(words)
-for w in words:
-    print(w, w in dir(builtins))
+for token in disambiguate(sentence):
+    print(token)
+    if (token[1] != None):
+        print(token, wc.check_word(wn.synset(token[1]), builtins))
