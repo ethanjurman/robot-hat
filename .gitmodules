@@ -1,3 +1,4 @@
 [submodule "pywsd"]
 	path = pywsd
 	url = git@github.com:alvations/pywsd.git
+	ignore = dirty
